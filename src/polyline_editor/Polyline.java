@@ -76,11 +76,11 @@ public class Polyline extends MouseAdapter {
             return true;
         }
         else if (tokens[0].equals("change")) {
-
+            if(getPoint(distanceIndex).getMoveAble()) {
                 mPts.set(distanceIndex, new PolyPoint(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
                 System.out.println(Integer.parseInt(tokens[1]) + Integer.parseInt(tokens[2]));
                 return true;
-
+            }
         }
         return false;
     }
