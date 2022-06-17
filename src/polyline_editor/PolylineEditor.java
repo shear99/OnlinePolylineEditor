@@ -68,7 +68,6 @@ public class PolylineEditor {
     class Broadcaster{
         public void broadcastCommand(String cmd){
             writer.println(name + ":" + cmd);
-            System.out.println(name + ":" + cmd);
             writer.flush();
         }
     }

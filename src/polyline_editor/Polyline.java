@@ -66,14 +66,21 @@ public class Polyline extends MouseAdapter {
     public boolean executeCommand(String cmd) {
         String[] tokens = cmd.split(" ");
         if (tokens[0].equals("add")) {
-            mPts.add(new PolyPoint(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+            distanceIndex = getDistanceIndex(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+            if (distanceIndex == -1) {                  // 거리가 너무 가까우면 드래그 하기 위해 클릭한 것으로 간주하고 새로운 point 생성하지 않음
+                moved = false;
+                mPts.add(new PolyPoint(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+            } else {
+                moved = true;
+            }
             return true;
         }
-        if (tokens[0].equals("drag")) {
-            if (moved && getPoint(distanceIndex).getMoveAble()) {
+        else if (tokens[0].equals("change")) {
+
                 mPts.set(distanceIndex, new PolyPoint(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+                System.out.println(Integer.parseInt(tokens[1]) + Integer.parseInt(tokens[2]));
                 return true;
-            }
+
         }
         return false;
     }
@@ -89,7 +96,7 @@ public class Polyline extends MouseAdapter {
             moved = true;
         }
         ((JPanel) e.getSource()).repaint();
-        caster.broadcastCommand("add " + x +" "+ y);
+        caster.broadcastCommand("add " + (int)x +" "+ (int)y);
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -101,7 +108,7 @@ public class Polyline extends MouseAdapter {
             mPts.set(distanceIndex, new PolyPoint(x, y));
         }
         ((JPanel) e.getSource()).repaint();
-        caster.broadcastCommand("drag " + x +" "+ y);
+        caster.broadcastCommand("change " + (int)x +" "+ (int)y);
 
     }
 }
